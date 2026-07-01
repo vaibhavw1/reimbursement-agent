@@ -1,0 +1,68 @@
+[
+  {
+    "claim_id": "CLM-001",
+    "employee": "Ravi Sharma",
+    "travel_dates": "2024-11-10 to 2024-11-12",
+    "destination": "Pune",
+    "purpose": "Client meeting at TechCorp",
+    "total_claimed": 340,
+    "items": [
+      { "id": "i1", "category": "hotel", "amount": 180, "nights": 2, "vendor": "Marriott Pune", "date": "2024-11-10", "receipt": true },
+      { "id": "i2", "category": "meals", "amount": 80, "days": 2, "vendor": "Various", "date": "2024-11-10", "receipt": true },
+      { "id": "i3", "category": "transport", "amount": 80, "vendor": "Uber", "date": "2024-11-10", "receipt": true }
+    ]
+  },
+  {
+    "claim_id": "CLM-002",
+    "employee": "Priya Nair",
+    "travel_dates": "2024-11-15",
+    "destination": "Bangalore",
+    "purpose": "AWS re:Invent local conference",
+    "total_claimed": 620,
+    "items": [
+      { "id": "i4", "category": "conference", "amount": 500, "vendor": "AWS Events", "date": "2024-11-15", "receipt": true },
+      { "id": "i5", "category": "flight", "amount": 80, "vendor": "IndiGo", "date": "2024-11-15", "receipt": true },
+      { "id": "i6", "category": "meals", "amount": 40, "days": 1, "vendor": "Restaurant", "date": "2024-11-15", "receipt": false }
+    ]
+  },
+  {
+    "claim_id": "CLM-003",
+    "employee": "Amit Desai",
+    "travel_dates": "2024-11-20 to 2024-11-22",
+    "destination": "Mumbai",
+    "purpose": "Sales pitch",
+    "total_claimed": 950,
+    "items": [
+      { "id": "i7", "category": "hotel", "amount": 400, "nights": 2, "vendor": "Taj Hotels", "date": "2024-11-20", "receipt": true },
+      { "id": "i8", "category": "meals", "amount": 200, "days": 2, "vendor": "Various", "date": "2024-11-20", "receipt": true },
+      { "id": "i9", "category": "transport", "amount": 200, "vendor": "Cab services", "date": "2024-11-20", "receipt": false },
+      { "id": "i10", "category": "meals", "amount": 150, "days": 1, "vendor": "Client dinner", "date": "2024-11-21", "receipt": true }
+    ]
+  },
+  {
+    "claim_id": "CLM-004",
+    "employee": "Sneha Kulkarni",
+    "travel_dates": "2024-11-25 to 2024-11-27",
+    "destination": "Pune",
+    "purpose": "Internal workshop",
+    "total_claimed": 280,
+    "items": [
+      { "id": "i11", "category": "hotel", "amount": 180, "nights": 2, "vendor": "ITC Pune", "date": "2024-11-25", "receipt": true },
+      { "id": "i12", "category": "meals", "amount": 60, "days": 2, "vendor": "Hotel restaurant", "date": "2024-11-25", "receipt": true },
+      { "id": "i13", "category": "transport", "amount": 40, "vendor": "Uber", "date": "2024-11-25", "receipt": true }
+    ]
+  },
+  {
+    "claim_id": "CLM-005",
+    "employee": "Rahul Mehta",
+    "travel_dates": "2024-11-28",
+    "destination": "Pune",
+    "purpose": "Team outing",
+    "total_claimed": 450,
+    "items": [
+      { "id": "i14", "category": "meals", "amount": 300, "days": 1, "vendor": "The Corinthians Resort", "date": "2024-11-28", "receipt": true, "notes": "Team dinner for 10 people" },
+      { "id": "i15", "category": "transport", "amount": 100, "vendor": "Tempo Traveller", "date": "2024-11-28", "receipt": true },
+      { "id": "i16", "category": "meals", "amount": 50, "days": 1, "vendor": "The Corinthians Resort", "date": "2024-11-28", "receipt": true, "notes": "Duplicate of team dinner" }
+    ]
+  }
+]

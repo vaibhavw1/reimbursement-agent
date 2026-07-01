@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Reimbursement Approval Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f8fb;
+    --surface: #ffffff;
+    --surface-2: #fafbfc;
+    --border: #e5e7eb;
+    --border-strong: #d1d5db;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --text-soft: #94a3b8;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-soft: #eff6ff;
+    --success: #16a34a;
+    --success-soft: #dcfce7;
+    --warning: #d97706;
+    --warning-soft: #fef3c7;
+    --danger: #dc2626;
+    --danger-soft: #fee2e2;
+    --neutral: #6b7280;
+    --neutral-soft: #f3f4f6;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  .app-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
+    color: #fff;
+    padding: 48px 24px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .app-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12) 0%, transparent 40%),
+      radial-gradient(circle at 80% 60%, rgba(255,255,255,0.08) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .logo-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+
+  .app-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+
+  .app-header p {
+    font-size: 15px;
+    margin: 10px 0 0;
+    opacity: 0.9;
+    max-width: 640px;
+    line-height: 1.6;
+  }
+
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    background: #4ade80;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+  }
+
+  .container {
+    max-width: 960px;
+    margin: -28px auto 40px;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .panel:hover { box-shadow: var(--shadow-md); }
+
+  .control-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .control-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+
+  select {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+
+  .button-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    padding: 10px 18px;
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.01em;
+  }
+
+  button.primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2);
+  }
+
+  button.primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    transform: translateY(-1px);
+  }
+
+  button.secondary {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+
+  button.secondary:hover:not(:disabled) {
+    background: var(--surface-2);
+    border-color: var(--text-soft);
+  }
+
+  button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  button:active:not(:disabled) { transform: translateY(0); }
+
+  .result-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .result-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .result-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.8);
+  }
+
+  .badge.Approve { background: var(--success); }
+  .badge.Partially-Approve { background: var(--warning); }
+  .badge.Reject { background: var(--danger); }
+  .badge.Manual-Review { background: var(--neutral); }
+
+  .confidence {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .metric {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .metric-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .metric-value.success { color: var(--success); }
+  .metric-value.warning { color: var(--warning); }
+
+  .section {
+    margin-bottom: 18px;
+  }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .section-title::before {
+    content: '';
+    width: 3px;
+    height: 14px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+
+  .explanation {
+    background: var(--primary-soft);
+    border-left: 3px solid var(--primary);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #1e3a8a;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .list {
+    margin: 0;
+    padding: 0 0 0 4px;
+    list-style: none;
+  }
+
+  .list li {
+    position: relative;
+    padding: 7px 0 7px 22px;
+    font-size: 14px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .list li:last-child { border-bottom: none; }
+
+  .list li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 14px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-soft);
+  }
+
+  .list.rejected li::before { background: var(--danger); }
+  .list.missing li::before { background: var(--warning); }
+  .list.policy li::before { background: var(--primary); }
+  .list.audit li::before { background: var(--neutral); }
+
+  .list-empty {
+    padding: 10px 0;
+    font-size: 13px;
+    color: var(--text-soft);
+    font-style: italic;
+  }
+
+  details {
+    margin-top: 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+
+  details summary {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+  }
+
+  details summary::-webkit-details-marker { display: none; }
+
+  details summary::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 5px solid var(--text-muted);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    transition: transform 0.2s;
+  }
+
+  details[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  details summary:hover { background: var(--surface); }
+
+  details .list {
+    padding: 4px 16px 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .loading-state {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2.5px solid var(--border-strong);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .error-state {
+    padding: 14px 18px;
+    background: var(--danger-soft);
+    border: 1px solid #fecaca;
+    border-left: 3px solid var(--danger);
+    border-radius: 8px;
+    color: #991b1b;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+  }
+
+  .empty-state-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+    opacity: 0.5;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-soft);
+    font-size: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .app-header { padding: 32px 20px 44px; }
+    .app-header h1 { font-size: 22px; }
+    .container { padding: 0 16px; }
+    .panel, .control-panel { padding: 18px; }
+    .result-header { flex-direction: column; align-items: flex-start; }
+    .header-right { align-items: flex-start; }
+    button { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-inner">
+    <div class="logo-row">
+      <div class="logo-icon">✈️</div>
+      <span style="font-size:13px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; opacity:0.85;">Finance Automation</span>
+    </div>
+    <h1>Travel Reimbursement Approval Agent</h1>
+    <p>AI-powered agent that evaluates employee travel claims against company policy using LangGraph + Groq — delivering consistent, auditable decisions in seconds.</p>
+    <div class="status-chip">
+      <span class="status-dot"></span>
+      Agent online · Policy engine ready
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="control-panel">
+    <label class="control-label" for="claimSelect">Select a sample claim</label>
+    <select id="claimSelect"></select>
+    <div class="button-row">
+      <button id="evaluateBtn" class="primary" onclick="evaluateSelected()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Evaluate Claim
+      </button>
+      <button class="secondary" onclick="evaluateAll()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        Evaluate All 5 Samples
+      </button>
+    </div>
+  </div>
+
+  <div id="results">
+    <div class="panel empty-state">
+      <div class="empty-state-icon">📋</div>
+      <div>Select a claim above and click <b>Evaluate Claim</b> to begin.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Powered by LangGraph · Groq LLM · Policy-driven decision engine
+</div>
+
+<script>
+let claims = [];
+
+async function loadClaims() {
+  const res = await fetch('/claims');
+  claims = await res.json();
+  const select = document.getElementById('claimSelect');
+  claims.forEach((c, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${c.claim_id} — ${c.employee} (${c.destination}) — $${c.total_claimed}`;
+    select.appendChild(opt);
+  });
+}
+
+function renderResult(result) {
+  if (result.error) {
+    return `<div class="error-state">Claim <b>${result.claim_id}</b>: ${result.error}</div>`;
+  }
+
+  const badgeClass = result.decision.replace(/ /g, '-');
+  const renderList = (items, cls) => {
+    if (!items || items.length === 0) return `<div class="list-empty">None</div>`;
+    return `<ul class="list ${cls}">${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
+  };
+
+  const rejectedItems = renderList(result.rejected_items, 'rejected');
+  const missingDocs = renderList(result.missing_documents, 'missing');
+  const policyRefs = renderList(result.policy_references, 'policy');
+  const audit = renderList(result.audit_trail, 'audit');
+
+  const approvalFrom = result.approval_required_from || 'Auto-approved (within threshold)';
+
+  return `
+    <div class="panel">
+      <div class="result-header">
+        <div>
+          <h2>${result.claim_id} — ${result.employee}</h2>
+          <div class="result-subtitle">Claim evaluation summary</div>
+        </div>
+        <div class="header-right">
+          <span class="badge ${badgeClass}">${result.decision}</span>
+          <span class="confidence">Confidence: ${(result.confidence * 100).toFixed(0)}%</span>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-label">Approved amount</div>
+          <div class="metric-value success">$${result.approved_amount}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Deducted amount</div>
+          <div class="metric-value warning">$${result.deducted_amount}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Approval required from</div>
+          <div class="metric-value" style="font-size:14px; font-weight:600;">${approvalFrom}</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Explanation</h3>
+        <div class="explanation">${result.explanation}</div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Rejected items</h3>
+        ${rejectedItems}
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Missing documents</h3>
+        ${missingDocs}
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Policy references</h3>
+        ${policyRefs}
+      </div>
+
+      <details>
+        <summary>Audit trail (tool calls)</summary>
+        ${audit}
+      </details>
+    </div>
+  `;
+}
+
+async function evaluateSelected() {
+  const idx = document.getElementById('claimSelect').value;
+  const claim = claims[idx];
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = `
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <div>Evaluating claim <b>${claim.claim_id}</b>… this may take 5–15 seconds</div>
+    </div>
+  `;
+
+  const btn = document.getElementById('evaluateBtn');
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/evaluate-claim', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(claim)
+    });
+    const data = await res.json();
+    resultsDiv.innerHTML = renderResult(data);
+  } catch (e) {
+    resultsDiv.innerHTML = `<div class="error-state">Request failed: ${e}</div>`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function evaluateAll() {
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = `
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <div>Evaluating all 5 sample claims… this may take 30–60 seconds</div>
+    </div>
+  `;
+
+  try {
+    const res = await fetch('/evaluate-all-samples', { method: 'POST' });
+    const data = await res.json();
+    resultsDiv.innerHTML = data.results.map(renderResult).join('');
+  } catch (e) {
+    resultsDiv.innerHTML = `<div class="error-state">Request failed: ${e}</div>`;
+  }
+}
+
+loadClaims();
+</script>
+
+</body>
+</html>

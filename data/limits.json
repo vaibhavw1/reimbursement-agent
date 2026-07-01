@@ -1,0 +1,22 @@
+{
+  "categories": {
+    "flight": { "max_per_claim": 5000, "requires_receipt": true, "notes": "Economy only. Business class needs VP approval for flights > 8 hrs." },
+    "hotel": { "max_per_night": 150, "requires_receipt": true, "notes": "City-tier limits apply. See policy section 3." },
+    "meals": { "max_per_day": 60, "breakfast": 20, "lunch": 20, "dinner": 20, "requires_receipt": true },
+    "transport": { "max_per_day": 50, "requires_receipt": true, "notes": "Taxi, Uber, metro only." },
+    "conference": { "max_per_claim": 2000, "requires_receipt": true, "requires_preapproval": true },
+    "internet": { "max_per_day": 20, "requires_receipt": false, "notes": "International travel only." }
+  },
+  "city_tiers": {
+    "tier1": { "cities": ["Mumbai", "Delhi", "Bangalore"], "hotel_max": 120, "meals_max": 50 },
+    "tier2": { "cities": ["Pune", "Hyderabad", "Chennai"], "hotel_max": 100, "meals_max": 40 },
+    "tier3": { "cities": ["Other"], "hotel_max": 80, "meals_max": 30 },
+    "international": { "cities": ["US", "UK", "EU"], "hotel_max": 200, "meals_max": 80 }
+  },
+  "approval_thresholds": {
+    "auto": 500,
+    "manager": 2000,
+    "director": 5000,
+    "vp": 999999
+  }
+}

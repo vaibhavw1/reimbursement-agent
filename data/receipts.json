@@ -1,0 +1,18 @@
+{
+  "i1":  { "status": "present", "vendor": "Marriott Pune",          "amount": 180, "date": "2024-11-10" },
+  "i2":  { "status": "present", "vendor": "Various restaurants",    "amount": 80,  "date": "2024-11-10" },
+  "i3":  { "status": "present", "vendor": "Uber",                   "amount": 80,  "date": "2024-11-10" },
+  "i4":  { "status": "present", "vendor": "AWS Events",             "amount": 500, "date": "2024-11-15" },
+  "i5":  { "status": "present", "vendor": "IndiGo Airlines",        "amount": 80,  "date": "2024-11-15" },
+  "i6":  { "status": "missing", "vendor": "Restaurant",             "amount": 40,  "date": "2024-11-15" },
+  "i7":  { "status": "present", "vendor": "Taj Hotels",             "amount": 400, "date": "2024-11-20" },
+  "i8":  { "status": "present", "vendor": "Various",                "amount": 200, "date": "2024-11-20" },
+  "i9":  { "status": "missing", "vendor": "Cab services",           "amount": 200, "date": "2024-11-20" },
+  "i10": { "status": "present", "vendor": "Client dinner",          "amount": 150, "date": "2024-11-21" },
+  "i11": { "status": "present", "vendor": "ITC Pune",               "amount": 180, "date": "2024-11-25" },
+  "i12": { "status": "present", "vendor": "Hotel restaurant",       "amount": 60,  "date": "2024-11-25" },
+  "i13": { "status": "present", "vendor": "Uber",                   "amount": 40,  "date": "2024-11-25" },
+  "i14": { "status": "present", "vendor": "The Corinthians Resort", "amount": 300, "date": "2024-11-28" },
+  "i15": { "status": "present", "vendor": "Tempo Traveller",        "amount": 100, "date": "2024-11-28" },
+  "i16": { "status": "present", "vendor": "The Corinthians Resort", "amount": 50,  "date": "2024-11-28" }
+}

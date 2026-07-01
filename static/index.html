@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Travel Reimbursement Approval Agent</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; background: #f5f5f5; color: #222; }
+  h1 { font-size: 22px; }
+  .panel { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+  select, button { padding: 8px 14px; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; }
+  button { background: #2563eb; color: #fff; border: none; cursor: pointer; }
+  button:hover { background: #1d4ed8; }
+  button:disabled { background: #999; cursor: not-allowed; }
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 13px; font-weight: bold; color: #fff; }
+  .Approve { background: #16a34a; }
+  .Partially-Approve { background: #d97706; }
+  .Reject { background: #dc2626; }
+  .Manual-Review { background: #6b7280; }
+  table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  td, th { text-align: left; padding: 6px 8px; border-bottom: 1px solid #eee; font-size: 14px; }
+  ul { margin: 4px 0; padding-left: 20px; font-size: 14px; }
+  pre { background: #111; color: #c8e1ff; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; }
+  .loading { color: #555; font-style: italic; }
+  .error { color: #dc2626; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>Travel Reimbursement Approval Agent</h1>
+<p>AI agent that evaluates employee travel claims against company policy using LangGraph + Groq.</p>
+
+<div class="panel">
+  <label for="claimSelect"><b>Select a sample claim:</b></label><br><br>
+  <select id="claimSelect"></select>
+  <button id="evaluateBtn" onclick="evaluateSelected()">Evaluate Claim</button>
+  <button onclick="evaluateAll()">Evaluate All 5 Samples</button>
+</div>
+
+<div id="results"></div>
+
+<script>
+let claims = [];
+
+async function loadClaims() {
+  const res = await fetch('/claims');
+  claims = await res.json();
+  const select = document.getElementById('claimSelect');
+  claims.forEach((c, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${c.claim_id} — ${c.employee} (${c.destination}) — $${c.total_claimed}`;
+    select.appendChild(opt);
+  });
+}
+
+function renderResult(result) {
+  if (result.error) {
+    return `<div class="panel"><p class="error">Claim ${result.claim_id}: ${result.error}</p></div>`;
+  }
+
+  const badgeClass = result.decision.replace(/ /g, '-');
+  const rejectedItems = (result.rejected_items || []).map(i => `<li>${i}</li>`).join('') || '<li>None</li>';
+  const missingDocs = (result.missing_documents || []).map(i => `<li>${i}</li>`).join('') || '<li>None</li>';
+  const policyRefs = (result.policy_references || []).map(i => `<li>${i}</li>`).join('') || '<li>None</li>';
+  const audit = (result.audit_trail || []).map(i => `<li>${i}</li>`).join('') || '<li>None</li>';
+
+  return `
+    <div class="panel">
+      <h2>${result.claim_id} — ${result.employee}</h2>
+      <span class="badge ${badgeClass}">${result.decision}</span>
+      <span style="margin-left:10px; color:#555;">Confidence: ${(result.confidence * 100).toFixed(0)}%</span>
+
+      <table>
+        <tr><th>Approved amount</th><td>$${result.approved_amount}</td></tr>
+        <tr><th>Deducted amount</th><td>$${result.deducted_amount}</td></tr>
+        <tr><th>Approval required from</th><td>${result.approval_required_from || 'N/A (within auto-approval threshold)'}</td></tr>
+      </table>
+
+      <p><b>Explanation:</b> ${result.explanation}</p>
+
+      <b>Rejected items:</b><ul>${rejectedItems}</ul>
+      <b>Missing documents:</b><ul>${missingDocs}</ul>
+      <b>Policy references:</b><ul>${policyRefs}</ul>
+
+      <details>
+        <summary><b>Audit trail (tool calls)</b></summary>
+        <ul>${audit}</ul>
+      </details>
+    </div>
+  `;
+}
+
+async function evaluateSelected() {
+  const idx = document.getElementById('claimSelect').value;
+  const claim = claims[idx];
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '<p class="loading">Evaluating claim... (this may take 5-15 seconds)</p>';
+
+  const btn = document.getElementById('evaluateBtn');
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/evaluate-claim', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(claim)
+    });
+    const data = await res.json();
+    resultsDiv.innerHTML = renderResult(data);
+  } catch (e) {
+    resultsDiv.innerHTML = `<p class="error">Request failed: ${e}</p>`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function evaluateAll() {
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '<p class="loading">Evaluating all 5 sample claims... (this may take 30-60 seconds)</p>';
+
+  try {
+    const res = await fetch('/evaluate-all-samples', { method: 'POST' });
+    const data = await res.json();
+    resultsDiv.innerHTML = data.results.map(renderResult).join('');
+  } catch (e) {
+    resultsDiv.innerHTML = `<p class="error">Request failed: ${e}</p>`;
+  }
+}
+
+loadClaims();
+</script>
+
+</body>
+</html>
